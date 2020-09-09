@@ -1,5 +1,6 @@
 db.sqlite3
 
-/node_modules/
-/.venv/
+node_modules
+/static/
+venv*
 *.pyc

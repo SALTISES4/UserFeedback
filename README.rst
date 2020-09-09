@@ -52,7 +52,7 @@ Quick start
     `injectDialog` will take four parameters, dialog title, company logo path,
     snackbar post success message, and snackbar post failure message::
 
-      root.injectDialog(
+      userFeedback.injectDialog(
         "{% trans 'Let us know how we can improve your experience!' %}",
         "{% static 'user_feedback/example_logo/aperture.svg' %}",
         "{% trans 'Thanks for your feedback!' %}",
@@ -76,7 +76,7 @@ Quick start dev
 
 4. Create a superuser and login::
 
-    ./manage.py createsuperuser
+    python user_feedback.py createsuperuser
     ...
 
 5. Start the server::

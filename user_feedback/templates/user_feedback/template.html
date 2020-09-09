@@ -1,9 +1,10 @@
 {% load static i18n %} {% get_current_language as LANGUAGE_CODE %}
+
 <!DOCTYPE html>
 <html lang="{{LANGUAGE_CODE}}">
   <head>
     <link
-      href="https://fonts.googleapis.com/css?family=Material+Icons|Roboto|Fanwood+Text:400i|Quicksand:300,400|Rubik:200,300,300i,400"
+      href="https://fonts.googleapis.com/css?family=Material+Icons|Roboto"
       rel="stylesheet"
       type="text/css"
     />
@@ -17,7 +18,7 @@
 
     <link
       rel="stylesheet"
-      href="{% static 'course_flow/css/preact_styles.css' %}"
+      href="{% static 'user_feedback/css/preact_styles.css' %}"
     />
   </head>
   <body>
@@ -27,7 +28,7 @@
   </body>
   <script>
     window.addEventListener("load", function() {
-      root.injectDialog(
+      userFeedback.injectDialog(
         "{% trans 'Let us know how we can improve your experience!' %}",
         "{% static 'user_feedback/example_logo/aperture.svg' %}",
         "{% trans 'Thanks for your feedback!' %}",
