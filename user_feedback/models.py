@@ -10,7 +10,7 @@ class Feedback(models.Model):
     FEEDBACK_TYPE = ((1, "Bug Report"), (2, "Feature Request"), (3, "Review"))
     type = models.PositiveIntegerField(choices=FEEDBACK_TYPE)
     rating = models.PositiveIntegerField(choices=ONE_TO_FIVE_RATING_CHOICES, null=True)
-    text = models.TextField(max_length=400, null=True, blank=True)
+    text = models.TextField(max_length=2000, null=True, blank=True)
     url = models.CharField(max_length=50)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_on = models.DateTimeField(auto_now_add=True)

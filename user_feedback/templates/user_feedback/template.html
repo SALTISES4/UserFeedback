@@ -8,33 +8,37 @@
       rel="stylesheet"
       type="text/css"
     />
-    <!-- ** jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- ** user_feedback scripts -->
+
     <script
-      src="{% static 'user_feedback/js/scripts.min.js' %}"
+      src="{% static 'user_feedback/js/app.min.js' %}"
       defer="true"
     ></script>
 
-    <link
-      rel="stylesheet"
-      href="{% static 'user_feedback/css/preact_styles.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'user_feedback/js/app.min.css' %}" />
   </head>
   <body>
-    <div id="user-feedback-container">
-      {% csrf_token %}
-    </div>
+    <div id="user-feedback-app">{% csrf_token %}</div>
   </body>
   <script>
-    window.addEventListener("load", function() {
-      userFeedback.injectDialog(
-        "{% trans 'Let us know how we can improve your experience!' %}",
-        "{% static 'user_feedback/example_logo/aperture.svg' %}",
-        "{% trans 'Thanks for your feedback!' %}",
-        "{% trans 'Sorry, please try again later!' %}",
-        "{% url 'user_feedback:post' %}"
-      );
+    window.addEventListener("load", function () {
+      const feedback = () => {
+        return app.h(app.App, {
+          acceptText: "{% trans 'Send' %}",
+          cancelText: "{% trans 'Cancel' %}",
+          description: "{% trans 'Leave feedback or get help' %}",
+          logo: "{% static 'user_feedback/example_logo/aperture.svg' %}",
+          menuFeedbackText: "{% trans 'Give feedback' %}",
+          menuHelpText: "{% trans 'Tutorials and Forums' %}",
+          menuHelpUrl: "#",
+          placeholder: "{% trans 'Let us know what is on your mind...' %}",
+          snackbarError: "{% trans 'Sorry, please try again later!' %}",
+          snackbarSuccess: "{% trans 'Thanks for your feedback!' %}",
+          text: "",
+          title: "{% trans 'How we can improve your experience?' %}",
+          url: "{% url 'user_feedback:post' %}"
+        });
+      };
+      app.render(feedback(), document.getElementById("user-feedback-app"));
     });
   </script>
 </html>
