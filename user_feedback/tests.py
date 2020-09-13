@@ -15,10 +15,8 @@ class FeedbackPostTest(TestCase):
     def test_feedback_post(self):
         response = self.client.post(
             reverse("user_feedback:post"),
-            data={
-                "json": '{"rating": 4, "text": "dfgfdgdfgdfgdfgfdgdfg", '
-                '"author": null, "url": "/course/1/", "type": "2"}'
-            },
+            data={"text": "dfgfdgdfgdfgdfgfdgdfg", "url": "/course/1/", "type": "2"},
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, 302)
         user = User.objects.create(username="testuser")
@@ -30,24 +28,21 @@ class FeedbackPostTest(TestCase):
             reverse("user_feedback:post"),
             data={
                 "json": '{"rating": 4, "text": "dfgfdgdfgdfgdfgfdgdfg", '
-                '"author": null, "url": "/course/1/", "type": "2"}'
+                '"url": "/course/1/", "type": "2"}'
             },
         )
         self.assertEqual(response.status_code, 405)
         response = self.client.post(
             reverse("user_feedback:post"),
-            data={
-                "json": '{"rating": 4, "text": "dfgfdgdfgdfgdfgfdgdfg", '
-                '"author": null, "url": "/course/1/", "type": "2"}'
-            },
+            data={"text": "dfgfdgdfgdfgdfgfdgdfg", "url": "/course/1/", "type": "2"},
+            content_type="application/json",
         )
         posted_feedback = Feedback.objects.first()
-        self.assertEqual(posted_feedback.rating, 4)
         self.assertEqual(posted_feedback.text, "dfgfdgdfgdfgdfgfdgdfg")
         self.assertEqual(posted_feedback.author, user)
         self.assertEqual(posted_feedback.url, "/course/1/")
         self.assertEqual(posted_feedback.type, 2)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
     def test_email_on_bug_report(self):
         user = User.objects.create(username="testuser")
@@ -57,10 +52,8 @@ class FeedbackPostTest(TestCase):
         self.assertTrue(logged_in)
         self.client.post(
             reverse("user_feedback:post"),
-            data={
-                "json": '{"rating": null, "text": "dfgfdgdfgdfgdfgfdgdfg", '
-                '"author": null, "url": "/course/1/", "type": "1"}'
-            },
+            data={"text": "dfgfdgdfgdfgdfgfdgdfg", "url": "/course/1/", "type": "1"},
+            content_type="application/json",
         )
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("URGENT - bug report", mail.outbox[0].subject)
@@ -79,17 +72,13 @@ class FeedbackPostTest(TestCase):
         self.assertTrue(logged_in)
         self.client.post(
             reverse("user_feedback:post"),
-            data={
-                "json": '{"rating": null, "text": "dfgfdgdfgdfgdfgfdgdfg", '
-                '"author": null, "url": "/course/1/", "type": "1"}'
-            },
+            data={"text": "dfgfdgdfgdfgdfgfdgdfg", "url": "/course/1/", "type": "1"},
+            content_type="application/json",
         )
         self.client.post(
             reverse("user_feedback:post"),
-            data={
-                "json": '{"rating": null, "text": "dfgfdgdfgdfgdfgfdgdfg", '
-                '"author": null, "url": "/course/1/", "type": "1"}'
-            },
+            data={"text": "dfgfdgdfgdfgdfgfdgdfg", "url": "/course/1/", "type": "1"},
+            content_type="application/json",
         )
         self.assertEqual(len(mail.outbox), 2)
         self.assertIn("URGENT - bug report", mail.outbox[0].subject)

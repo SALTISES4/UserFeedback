@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="{% static 'user_feedback/js/app.min.css' %}" />
   </head>
   <body>
-    <div id="user-feedback-app">{% csrf_token %}</div>
+    <div id="user-feedback-app"></div>
+    {% csrf_token %}
   </body>
   <script>
     window.addEventListener("load", function () {
@@ -25,16 +26,22 @@
         return app.h(app.App, {
           acceptText: "{% trans 'Send' %}",
           cancelText: "{% trans 'Cancel' %}",
+          charCountText: "{% trans 'characters remaining' %}",
           description: "{% trans 'Leave feedback or get help' %}",
-          logo: "{% static 'user_feedback/example_logo/aperture.svg' %}",
-          menuFeedbackText: "{% trans 'Give feedback' %}",
+          feedbackTypes: [
+            { value: 1, text: "Bug report" },
+            { value: 2, text: "Feature request" },
+            { value: 3, text: "General feedback" }
+          ],
+          menuFeedbackText: "{% trans 'Give Feedback' %}",
           menuHelpText: "{% trans 'Tutorials and Forums' %}",
           menuHelpUrl: "#",
           placeholder: "{% trans 'Let us know what is on your mind...' %}",
-          snackbarError: "{% trans 'Sorry, please try again later!' %}",
+          snackbarError:
+            "{% trans 'An error occurred.  Please try again later.' %}",
           snackbarSuccess: "{% trans 'Thanks for your feedback!' %}",
           text: "",
-          title: "{% trans 'How we can improve your experience?' %}",
+          title: "{% trans 'How can we improve your experience?' %}",
           url: "{% url 'user_feedback:post' %}"
         });
       };

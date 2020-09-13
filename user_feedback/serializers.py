@@ -1,17 +1,19 @@
+import bleach
+
 from rest_framework import serializers
-from .models import Feedback, User
+
+from .models import Feedback
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
-        fields = ["id", "rating", "text", "created_on", "author", "url", "type"]
+        fields = ["author", "text", "type", "url"]
 
     def create(self, validated_data):
         return Feedback.objects.create(
-            author=User.objects.get(pk=self.initial_data["author"]),
-            rating=validated_data["rating"],
-            text=validated_data["text"],
-            url=validated_data["url"],
+            author=validated_data["author"],
+            text=bleach.clean(validated_data["text"], tags=[], strip=True).rstrip(),
             type=validated_data["type"],
+            url=validated_data["url"],
         )

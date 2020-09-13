@@ -1,0 +1,8 @@
+/* Patches */
+.mdc-button {
+  font-weight: bold;
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #54c0db;
+}
