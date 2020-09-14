@@ -25,7 +25,6 @@ import "@rmwc/radio/node_modules/@material/radio/dist/mdc.radio.min.css";
 import "@rmwc/snackbar/node_modules/@material/snackbar/dist/mdc.snackbar.min.css";
 import "@rmwc/textfield/node_modules/@material/textfield/dist/mdc.textfield.min.css";
 import "@rmwc/theme/node_modules/@material/theme/dist/mdc.theme.min.css";
-import "../css/styles.css";
 
 export { h, render };
 
@@ -114,6 +113,7 @@ export class App extends Component {
             open={this.state.menuIsOpen}
             onClose={() => this.setState({ menuIsOpen: false })}
             onSelect={() => this.setState({ menuIsOpen: false })}
+            style={{ width: "max-content" }}
           >
             <MenuItem
               onClick={() => {
