@@ -12,7 +12,6 @@ import { Menu, MenuItem, MenuSurfaceAnchor } from "@rmwc/menu";
 import { Radio } from "@rmwc/radio";
 import { Snackbar } from "@rmwc/snackbar";
 import { TextField, TextFieldHelperText } from "@rmwc/textfield";
-import { ThemeProvider } from "@rmwc/theme";
 
 import "@rmwc/button/node_modules/@material/button/dist/mdc.button.min.css";
 import "@rmwc/dialog/node_modules/@material/dialog/dist/mdc.dialog.min.css";
@@ -24,7 +23,6 @@ import "@rmwc/menu/node_modules/@material/menu-surface/dist/mdc.menu-surface.min
 import "@rmwc/radio/node_modules/@material/radio/dist/mdc.radio.min.css";
 import "@rmwc/snackbar/node_modules/@material/snackbar/dist/mdc.snackbar.min.css";
 import "@rmwc/textfield/node_modules/@material/textfield/dist/mdc.textfield.min.css";
-import "@rmwc/theme/node_modules/@material/theme/dist/mdc.theme.min.css";
 
 export { h, render };
 
@@ -140,88 +138,81 @@ export class App extends Component {
           />
         </MenuSurfaceAnchor>
 
-        <ThemeProvider
-          options={{
-            primary: "#54c0db",
-            secondary: "#004266",
+        <Dialog
+          open={this.state.dialogIsOpen}
+          onClose={() => {
+            this.setState({ dialogIsOpen: false });
           }}
         >
-          <Dialog
-            open={this.state.dialogIsOpen}
-            onClose={() => {
-              this.setState({ dialogIsOpen: false });
-            }}
-          >
-            <DialogTitle>{this.props.title}</DialogTitle>
-            <DialogContent>
-              {this.props.text}
-              <div style={{ paddingBottom: "10px" }}>
-                {this.props.feedbackTypes.map((type) => {
-                  return (
-                    <div>
-                      <Radio
-                        value={type.text}
-                        checked={this.state.feedbackType === type.value}
-                        onChange={() =>
-                          this.setState({ feedbackType: type.value })
-                        }
-                      >
-                        {type.text}
-                      </Radio>
-                    </div>
-                  );
-                })}
-              </div>
-              <TextField
-                fullwidth
-                label={this.props.placeholder}
-                rows="6"
-                style={{ resize: "vertical" }}
-                textarea
-                value={this.state.feedbackText}
-                onInput={(evt) => {
-                  if (evt.target.value.length <= this.characterLimit) {
-                    this.setState({
-                      feedbackText: evt.target.value,
-                    });
-                  } else {
-                    evt.target.value = this.state.feedbackText;
-                  }
-                }}
-              />
-              <TextFieldHelperText persistent>
-                {this.characterLimit - this.state.feedbackText.length}{" "}
-                {this.props.charCountText}
-              </TextFieldHelperText>
-            </DialogContent>
-            <DialogActions>
-              <DialogButton ripple action="close">
-                {this.props.cancelText}
-              </DialogButton>
-              <DialogButton
-                ripple
-                action="accept"
-                isDefaultAction
-                disabled={
-                  this.state.feedbackType === null ||
-                  this.state.feedbackText.length == 0
+          <DialogTitle>{this.props.title}</DialogTitle>
+          <DialogContent>
+            {this.props.text}
+            <div style={{ paddingBottom: "10px" }}>
+              {this.props.feedbackTypes.map((type) => {
+                return (
+                  <div>
+                    <Radio
+                      value={type.text}
+                      checked={this.state.feedbackType === type.value}
+                      onChange={() =>
+                        this.setState({ feedbackType: type.value })
+                      }
+                    >
+                      {type.text}
+                    </Radio>
+                  </div>
+                );
+              })}
+            </div>
+            <TextField
+              fullwidth
+              label={this.props.placeholder}
+              rows="6"
+              style={{ resize: "vertical" }}
+              textarea
+              value={this.state.feedbackText}
+              onInput={(evt) => {
+                if (evt.target.value.length <= this.characterLimit) {
+                  this.setState({
+                    feedbackText: evt.target.value,
+                  });
+                } else {
+                  evt.target.value = this.state.feedbackText;
                 }
-                onClick={this.handleSubmit}
-              >
-                {this.props.acceptText}
-              </DialogButton>
-            </DialogActions>
-          </Dialog>
-          <Snackbar
-            show={this.state.snackbarIsOpen}
-            onHide={(evt) => this.setState({ snackbarIsOpen: false })}
-            message={this.state.snackbarMessage}
-            timeout={5000}
-            actionHandler={() => {}}
-            actionText="OK"
-            dismissesOnAction={true}
-          />
-        </ThemeProvider>
+              }}
+            />
+            <TextFieldHelperText persistent>
+              {this.characterLimit - this.state.feedbackText.length}{" "}
+              {this.props.charCountText}
+            </TextFieldHelperText>
+          </DialogContent>
+          <DialogActions>
+            <DialogButton ripple action="close">
+              {this.props.cancelText}
+            </DialogButton>
+            <DialogButton
+              ripple
+              action="accept"
+              isDefaultAction
+              disabled={
+                this.state.feedbackType === null ||
+                this.state.feedbackText.length == 0
+              }
+              onClick={this.handleSubmit}
+            >
+              {this.props.acceptText}
+            </DialogButton>
+          </DialogActions>
+        </Dialog>
+        <Snackbar
+          show={this.state.snackbarIsOpen}
+          onHide={(evt) => this.setState({ snackbarIsOpen: false })}
+          message={this.state.snackbarMessage}
+          timeout={5000}
+          actionHandler={() => {}}
+          actionText="OK"
+          dismissesOnAction={true}
+        />
       </div>
     );
   }
