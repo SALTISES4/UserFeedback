@@ -1,5 +1,4 @@
 from datetime import datetime, timezone, timedelta
-import bleach
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -14,20 +13,22 @@ from .serializers import FeedbackSerializer
 @require_POST
 @login_required
 def post_feedback_json(request):
-    data = json.loads(request.POST.get("json"))
-    data["text"] = bleach.clean(data["text"], tags=[], strip=True).rstrip()
-    data["author"] = request.user.pk
+    data = json.loads(request.body)
     serializer = FeedbackSerializer(data=data)
     if serializer.is_valid():
-        feedback_object = serializer.save()
+        feedback_object = serializer.save(author=request.user)
         if feedback_object.type == 1:
-            send_bug_report_emails(request, data)
-        return JsonResponse({"action": "posted"})
+            send_bug_report_emails(request, feedback_object)
+        response = JsonResponse({"detail": "success"})
+        response.status_code = 201
+        return response
     else:
-        return JsonResponse({"action": "error"})
+        response = JsonResponse({"detail": "error"})
+        response.status_code = 400
+        return response
 
 
-def send_bug_report_emails(request, data):
+def send_bug_report_emails(request, feedback_object):
     mail_admins(
         subject="URGENT - bug report",
         message="A bug has been reported on %s's %s. The user has written the "
@@ -35,11 +36,11 @@ def send_bug_report_emails(request, data):
         "last 10 days at this url."
         % (
             request.get_host(),
-            data["url"][1:-1],
-            data["text"],
+            feedback_object.url[1:-1],
+            feedback_object.text,
             Feedback.objects.filter(
                 type=1,
-                url=data["url"],
+                url=feedback_object.url,
                 created_on__lte=datetime.now(timezone.utc),
                 created_on__gt=datetime.now(timezone.utc) - timedelta(days=10),
             ).count()
