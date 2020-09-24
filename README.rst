@@ -52,7 +52,7 @@ Quick start
     <script>
       window.addEventListener("load", function () {
         const feedback = () => {
-          return app.h(app.App, {
+          return user_feedback.h(user_feedback.App, {
             acceptText: "{% trans 'Send' %}",
             cancelText: "{% trans 'Cancel' %}",
             charCountText: "{% trans 'characters remaining' %}",
@@ -74,7 +74,7 @@ Quick start
             url: "{% url 'user_feedback:post' %}"
           });
         };
-        app.render(feedback(), document.getElementById("user-feedback-app"));
+        user_feedback.render(feedback(), document.getElementById("user-feedback-app"));
       });
     </script>
 
