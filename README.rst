@@ -34,10 +34,10 @@ Quick start
 
 6. If '/accounts/login/' is not active, make sure to have a `LOGIN_URL` in your settings.py.
 
-7. Import user_feedback's minified script and styles in your base template(s)::
+7. Import user_feedback's minified script and styles in your base template(s).  Note that the styles are nested within container id::
 
     <script src="{% static 'user_feedback/js/app.min.js' %}" defer="true"></script>
-    <link rel="stylesheet" href="{% static 'user_feedback/js/app.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'user_feedback/css/styles.min.css' %}" />
 
 8. Place the following element in templates where you would like for users to offer feedback::
 

@@ -13,17 +13,6 @@ import { Radio } from "@rmwc/radio";
 import { Snackbar } from "@rmwc/snackbar";
 import { TextField, TextFieldHelperText } from "@rmwc/textfield";
 
-import "@rmwc/button/node_modules/@material/button/dist/mdc.button.min.css";
-import "@rmwc/dialog/node_modules/@material/dialog/dist/mdc.dialog.min.css";
-import "@rmwc/formfield/node_modules/@material/form-field/dist/mdc.form-field.min.css";
-import "@rmwc/icon-button/node_modules/@material/icon-button/dist/mdc.icon-button.min.css";
-import "@rmwc/list/node_modules/@material/list/dist/mdc.list.min.css";
-import "@rmwc/menu/node_modules/@material/menu/dist/mdc.menu.min.css";
-import "@rmwc/menu/node_modules/@material/menu-surface/dist/mdc.menu-surface.min.css";
-import "@rmwc/radio/node_modules/@material/radio/dist/mdc.radio.min.css";
-import "@rmwc/snackbar/node_modules/@material/snackbar/dist/mdc.snackbar.min.css";
-import "@rmwc/textfield/node_modules/@material/textfield/dist/mdc.textfield.min.css";
-
 export { h, render };
 
 function getCsrfToken() {
@@ -102,7 +91,7 @@ export class App extends Component {
 
   render() {
     return (
-      <div>
+      <div id="user-feedback-component">
         <MenuSurfaceAnchor>
           <Menu
             anchorCorner={

@@ -1,5 +1,6 @@
 /* Build tools */
 const gulp = require("gulp");
+const concat = require("gulp-concat");
 
 /* Build modules for scripts */
 const commonjs = require("@rollup/plugin-commonjs"); // loader
@@ -10,9 +11,17 @@ const strip = require("@rollup/plugin-strip"); // remove console.log statements
 const rollup = require("rollup"); // bundler
 const { terser } = require("rollup-plugin-terser"); // minifier
 const nodeResolve = resolve.default;
-const embedCSS = require("rollup-plugin-postcss");
 const alias = require("@rollup/plugin-alias");
 const replace = require("@rollup/plugin-replace");
+
+/* Build modules for styles */
+const scssLint = require("stylelint"); // linter
+const cssMinify = require("cssnano"); // minifier
+const cssPolyfills = require("postcss-preset-env"); // autoprefixer + polyfills
+const postcss = require("gulp-postcss"); // css
+const scss = require("postcss-scss"); // understand scss syntax
+const sass = require("@csstools/postcss-sass"); // sass compiler
+const sourcemaps = require("gulp-sourcemaps"); // sourcemaps
 
 /* Configure */
 const babelConfig = {
@@ -58,7 +67,6 @@ function buildScript(app, module) {
         mainFields: ["module", "main", "browser"],
       }),
       commonjs(),
-      embedCSS({ extract: true }),
       strip(),
     ],
   };
@@ -76,8 +84,42 @@ function buildScript(app, module) {
     .then((bundle) => bundle.write(outputOptions));
 }
 
-exports.build = () => buildScript("user_feedback", "app");
+function buildStyle(app, module) {
+  const cb = (file) => {
+    // https://github.com/postcss/gulp-postcss#advanced-usage
+    return {
+      plugins: [
+        scssLint(),
+        sass({ includePaths: ["node_modules/"] }),
+        cssPolyfills(),
+        cssMinify(),
+      ],
+      options: {
+        parser: scss,
+      },
+    };
+  };
+  const build = gulp
+    .src(
+      [
+        `./${app}/static/${app}/css/${module}/**/*.scss`,
+        `./${app}/static/${app}/css/${module}.scss`,
+      ],
+      { allowEmpty: true }
+    )
+    .pipe(sourcemaps.init())
+    .pipe(postcss(cb))
+    .pipe(concat(`${module}.min.css`))
+    .pipe(sourcemaps.write("."))
+    .pipe(gulp.dest(`./${app}/static/${app}/css`));
+
+  return build;
+}
+
+exports.scripts = () => buildScript("user_feedback", "app");
+exports.styles = () => buildStyle("user_feedback", "styles");
 exports.watch = () =>
-  gulp.watch("./user_feedback/static/user_feedback/js/app.js", () =>
-    buildScript("user_feedback", "app")
-  );
+  gulp.watch("./user_feedback/static/user_feedback/js/app.js", () => {
+    buildScript("user_feedback", "app");
+    buildStyle("user_feedback", "app");
+  });
