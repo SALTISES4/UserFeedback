@@ -120,5 +120,5 @@ exports.styles = () => buildStyle("user_feedback", "styles");
 exports.watch = () =>
   gulp.watch("./user_feedback/static/user_feedback/js/app.js", () => {
     buildScript("user_feedback", "app");
-    buildStyle("user_feedback", "app");
+    buildStyle("user_feedback", "styles");
   });
