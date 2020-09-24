@@ -45,7 +45,6 @@ const babelConfig = {
 };
 
 function buildScript(app, module) {
-  const name = module === "index" ? "bundle" : module;
   const inputOptions = {
     input: `./${app}/static/${app}/js/${module}.js`,
     plugins: [
@@ -74,7 +73,7 @@ function buildScript(app, module) {
     extend: true,
     file: `./${app}/static/${app}/js/${module}.min.js`,
     format: "iife",
-    name,
+    name: app,
     plugins: [terser()],
     sourcemap: true,
   };
