@@ -91,7 +91,7 @@ export class App extends Component {
 
   render() {
     return (
-      <div id="user-feedback-component">
+      <div className="mdc-typography" id="user-feedback-component">
         <MenuSurfaceAnchor>
           <Menu
             anchorCorner={
