@@ -57,7 +57,7 @@ export class App extends Component {
   state = {
     dialogIsOpen: false,
     feedbackText: "",
-    feedbackType: null,
+    feedbackType: 3, // Default to "General feedback"
     menuIsOpen: false,
     snackbarIsOpen: false,
     snackbarMessage: "",
@@ -77,7 +77,7 @@ export class App extends Component {
         snackbarIsOpen: true,
         snackbarMessage: this.props.snackbarSuccess,
         feedbackText: "",
-        feedbackType: null,
+        feedbackType: 3,
       });
     } catch (error) {
       this.setState({
@@ -159,6 +159,7 @@ export class App extends Component {
               rows="6"
               style={{ resize: "vertical" }}
               textarea
+              required
               value={this.state.feedbackText}
               onInput={(evt) => {
                 if (evt.target.value.length <= this.characterLimit) {
